@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const vanturepicSchema = new Schema({
     title:String,
-    desctiption:String,
+    description:String,
     username:String,
     location:String,
     image:String

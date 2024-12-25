@@ -4,6 +4,7 @@ const path = require('path')
 const ejsMeta = require('ejs-mate')
 const Posts = require('./models/posts') 
 const mongoose = require('mongoose')
+const methodOverride = require('method-override')
 
 mongoose.connect('mongodb://127.0.0.1:27017/vanturePic')
 
@@ -21,6 +22,7 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({extended:true}))
+app.use(methodOverride('_method'))
 
 app.get('/', async (req,res)=>{
     res.render('home')
@@ -43,8 +45,26 @@ app.post('/vanturepics', async(req,res)=>{
 })
 
 app.get('/vanturepics/:id', async (req,res)=>{
-    const posts = await Posts.findById(req.params.id)
-    res.render('vanturepics/show', {posts})
+    const post = await Posts.findById(req.params.id)
+    res.render('vanturepics/show', {post})
+})
+
+app.get('/vanturepics/:id/edit', async (req,res) => {
+    const post = await Posts.findById(req.params.id)
+    res.render('vanturepics/edit', {post})
+})
+
+app.put('/vanturepics/:id', async (req,res)=>{
+    const {id} = req.params
+    const post = await Posts.findByIdAndUpdate(id, {...req.body})
+    await post.save()
+    res.redirect(`/vanturepics/${post.id}`)
+})
+
+app.delete('/vanturepics/:id', async (req,res)=>{
+    const {id} = req.params
+    await Posts.findByIdAndDelete(id)
+    res.redirect(`/vanturepics`)
 })
 
 app.listen(3000, ()=>{

@@ -1,0 +1,52 @@
+<% layout('layouts/boylerplate') %>
+
+<form
+  class="row w-50"
+  action="/vanturepics/<%= post.id %>?_method=PUT"
+  method="POST"
+>
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      name="title"
+      value="<%= post.title %>"
+      required
+    />
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    <input
+      type="text"
+      class="form-control"
+      id="username"
+      name="username"
+      value="<%= post.username %>"
+      required
+    />
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" rows="3" name="description">
+<%= post.description %></textarea
+    >
+
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Image</label>
+    <input
+      class="form-control"
+      type="text"
+      id="formFile"
+      name="image"
+      value="<%= post.image %>"
+    />
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <button class="btn btn-primary">Submit</button>
+</form>
