@@ -1,6 +1,11 @@
 <% layout('layouts/boylerplate') %>
 
-<form class="row w-50" action="/vanturepics" method="POST">
+<form
+  class="validated-form row w-50"
+  action="/vanturepics"
+  method="POST"
+  novalidate
+>
   <div class="mb-3">
     <label for="title" class="form-label">Title</label>
     <input type="text" class="form-control" id="title" name="title" required />
@@ -24,12 +29,19 @@
       id="description"
       rows="3"
       name="description"
+      required
     ></textarea>
     <div class="valid-feedback">Looks good</div>
   </div>
-  <div class="mb-3">
+  <div class="mb-3 pt-2">
     <label for="formFile" class="form-label">Image</label>
-    <input class="form-control" type="text" id="formFile" name="image" />
+    <input
+      class="form-control"
+      type="text"
+      id="formFile"
+      required
+      name="image"
+    />
     <div class="valid-feedback">Looks good</div>
   </div>
   <button class="btn btn-primary">Submit</button>
