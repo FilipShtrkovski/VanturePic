@@ -8,7 +8,13 @@
 >
   <div class="mb-3">
     <label for="title" class="form-label">Title</label>
-    <input type="text" class="form-control" id="title" name="title" required />
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      name="posts[title]"
+      required
+    />
     <div class="valid-feedback">Looks good</div>
   </div>
   <div class="mb-3">
@@ -17,7 +23,7 @@
       type="text"
       class="form-control"
       id="username"
-      name="username"
+      name="posts[username]"
       required
     />
     <div class="valid-feedback">Looks good</div>
@@ -28,7 +34,7 @@
       class="form-control"
       id="description"
       rows="3"
-      name="description"
+      name="posts[description]"
       required
     ></textarea>
     <div class="valid-feedback">Looks good</div>
@@ -40,7 +46,7 @@
       type="text"
       id="formFile"
       required
-      name="image"
+      name="posts[image]"
     />
     <div class="valid-feedback">Looks good</div>
   </div>

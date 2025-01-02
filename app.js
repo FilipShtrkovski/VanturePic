@@ -2,7 +2,8 @@ const express = require("express")
 const app = express()
 const path = require('path')
 const ejsMeta = require('ejs-mate')
-const Posts = require('./models/posts') 
+const Post = require('./models/posts') 
+const Comment = require('./models/comments') 
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
@@ -19,13 +20,10 @@ db.once("open", () => {
     console.log("Database connected")
 });
 
-
-
 app.engine('ejs', ejsMeta)
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
-
 
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
@@ -36,7 +34,7 @@ app.get('/', (req,res)=>{
 })
 
 app.get('/vanturepics', CatchAsync(async (req,res)=>{
-    const posts = await Posts.find({})
+    const posts = await Post.find({})
     res.render('vanturepics/index', {posts})
 }))
 
@@ -45,32 +43,41 @@ app.get('/vanturepics/new', CatchAsync(async (req,res)=>{
 }))
 
 app.post('/vanturepics', validatePosts, CatchAsync(async(req,res)=>{
-    const post = new Posts(req.body)
+    const post = new Post(req.body)
     await post.save()
     res.redirect(`/vanturepics/${post.id}`)
 }))
 
 app.get('/vanturepics/:id', CatchAsync(async (req,res)=>{
-    const post = await Posts.findById(req.params.id)
+    const post = await Post.findById(req.params.id)
     res.render('vanturepics/show', {post})
 }))
 
 app.get('/vanturepics/:id/edit', CatchAsync(async (req,res) => {
-    const post = await Posts.findById(req.params.id)
+    const post = await Post.findById(req.params.id)
     res.render('vanturepics/edit', {post})
 }))
 
 app.put('/vanturepics/:id', validatePosts, CatchAsync(async (req,res)=>{
     const {id} = req.params
-    const post = await Posts.findByIdAndUpdate(id, {...req.body})
+    const post = await Post.findByIdAndUpdate(id, {...req.body.posts})
     await post.save()
     res.redirect(`/vanturepics/${post.id}`)
 }))
 
 app.delete('/vanturepics/:id', CatchAsync(async (req,res)=>{
     const {id} = req.params
-    await Posts.findByIdAndDelete(id)
+    await Post.findByIdAndDelete(id)
     res.redirect(`/vanturepics`)
+}))
+
+app.post('/vanturepics/:id/comments', CatchAsync( async (req,res)=>{
+    const post = await Post.findById(req.params.id)
+    const comment = new Comment(req.body.comments)
+    post.comments.push(comment)
+    await comment.save()
+    await post.save()
+    res.redirect(`/vanturepics/${post.id}`)
 }))
 
 app.all('*', (req,res,next)=>{

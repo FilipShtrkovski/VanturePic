@@ -6,7 +6,12 @@ const vanturepicSchema = new Schema({
     description:String,
     username:String,
     location:String,
-    image:String
+    image:String,
+    comments:[
+        {
+            type:Schema.Types.ObjectId, ref:"Coment"
+        }
+    ]
 })
 
 module.exports = mongoose.model('Post', vanturepicSchema)

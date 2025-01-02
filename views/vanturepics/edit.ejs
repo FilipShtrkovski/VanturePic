@@ -12,7 +12,7 @@
       type="text"
       class="form-control"
       id="title"
-      name="title"
+      name="posts[title]"
       value="<%= post.title %>"
       required
     />
@@ -24,7 +24,7 @@
       type="text"
       class="form-control"
       id="username"
-      name="username"
+      name="posts[username]"
       value="<%= post.username %>"
       required
     />
@@ -36,7 +36,7 @@
       class="form-control"
       id="description"
       rows="3"
-      name="description"
+      name="posts[description]"
       required
     >
 <%= post.description %></textarea
@@ -51,7 +51,7 @@
       type="text"
       id="formFile"
       required
-      name="image"
+      name="posts[image]"
       value="<%= post.image %>"
     />
     <div class="valid-feedback">Looks good</div>

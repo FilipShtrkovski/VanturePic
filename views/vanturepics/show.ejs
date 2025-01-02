@@ -1,27 +1,36 @@
 <% layout('layouts/boylerplate') %>
-
-<div class="card mx-auto" style="width: 30rem">
-  <img src="<%= post.image %>" class="card-img-top" alt="..." />
-  <div class="card-body">
-    <h5 class="card-title"><%= post.title %></h5>
-    <p class="card-text"><%= post.description %></p>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><%= post.username %></li>
-    </ul>
-
+<div class="mx-auto" style="width: 30rem">
+  <div class="card mb-3">
+    <img src="<%= post.image %>" class="card-img-top" alt="..." />
     <div class="card-body">
-      <div class="btn-group" role="group" aria-label="Basic outlined example">
-        <a
-          href="/vanturepics/<%= post.id %>/edit"
-          class="btn btn-outline-success"
-          >Edit</a
-        >
-        <form action="/vanturepics/<%= post.id %>?_method=DELETE" method="POST">
-          <button class="btn btn-outline-danger">Delete</button>
-        </form>
+      <h5 class="card-title"><%= post.title %></h5>
+      <p class="card-text"><%= post.description %></p>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= post.username %></li>
+      </ul>
 
-        <a href="#" class="btn btn-outline-primary">Comments</a>
+      <div class="card-body">
+        <div class="btn-group" role="group">
+          <a href="/vanturepics/<%= post.id %>/edit" class="btn btn-info"
+            >Edit</a
+          >
+          <form
+            action="/vanturepics/<%= post.id %>?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-danger">Delete</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
+  <form action="/vanturepics/<%= post.id %>/comments" method="POST">
+    <label class="form-label" for="comment">Comments</label>
+    <textarea
+      name="comments[body]"
+      id="comment"
+      class="form-control"
+    ></textarea>
+    <button class="btn btn-success">Subbmit</button>
+  </form>
 </div>
