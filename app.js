@@ -7,8 +7,8 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const CatchAsync = require('./utils/CatchAsync')
-const {postsSchema} = require('./schema.js')
-const Joi = require("joi")
+const {validatePosts} = require('./middleware')
+
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/vanturePic')
@@ -30,22 +30,6 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
 
-
-const validatePosts = ((req,res,next)=>{
-    const postsSchema = Joi.object({
-        title:Joi.string().required(),
-        description:Joi.string().required(),
-        username:Joi.string().required(),
-        image:Joi.string().required() 
-    })
-    const {error} = postsSchema.validate(req.body)
-    if(error){
-        const msg = error.details.map(el=>el.message).join(',')
-        throw new ExpressError(msg, 400)
-    }else{
-        next()
-    }
-})
 
 app.get('/', (req,res)=>{
     res.render("home")
@@ -76,7 +60,7 @@ app.get('/vanturepics/:id/edit', CatchAsync(async (req,res) => {
     res.render('vanturepics/edit', {post})
 }))
 
-app.put('/vanturepics/:id', CatchAsync(async (req,res)=>{
+app.put('/vanturepics/:id', validatePosts, CatchAsync(async (req,res)=>{
     const {id} = req.params
     const post = await Posts.findByIdAndUpdate(id, {...req.body})
     await post.save()
