@@ -3,7 +3,7 @@ const router = express.Router({mergeParams:true})
 const Post = require('../models/posts') 
 const Comment = require('../models/comments') 
 const CatchAsync = require('../utils/CatchAsync')
-const {validatePosts, validateComments} = require('../middleware')
+const {validateComments} = require('../middleware')
 
 router.post('/',validateComments, CatchAsync( async (req,res)=>{
         const post = await Post.findById(req.params.id)

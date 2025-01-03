@@ -1,15 +1,8 @@
 const express = require("express")
-const app = express()
-const path = require('path')
 const router = express.Router()
-const ejsMeta = require('ejs-mate')
 const Post = require('../models/posts') 
-const Comment = require('../models/comments') 
-
-const methodOverride = require('method-override')
-const ExpressError = require('../utils/ExpressError')
 const CatchAsync = require('../utils/CatchAsync')
-const {validatePosts, validateComments} = require('../middleware')
+const {validatePosts} = require('../middleware')
 
 router.route('/')
     .get(CatchAsync(async (req,res)=>{
