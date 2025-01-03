@@ -9,8 +9,7 @@ const Comment = require('./models/comments')
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
-const CatchAsync = require('./utils/CatchAsync')
-const {validatePosts, validateComments} = require('./middleware')
+
 
 
 
@@ -37,22 +36,6 @@ app.use('/vanturepics/:id/comments', commentRouts)
 app.get('/', (req,res)=>{
     res.render("home")
 })
-
-// app.post('/vanturepics/:id/comments', validateComments, CatchAsync( async (req,res)=>{
-//     const post = await Post.findById(req.params.id)
-//     const comment = new Comment(req.body.comments)
-//     post.comments.push(comment)
-//     await comment.save()
-//     await post.save()
-//     res.redirect(`/vanturepics/${post.id}`)
-// }))
-
-// app.delete('/vanturepics/:id/comments/:commentsId', CatchAsync(async (req,res)=>{
-//     const {id, commentsId} = req.params
-//     await Post.findByIdAndUpdate(id, {$pull: {comments: commentsId}})
-//     await Comment.findByIdAndDelete(commentsId)
-//     res.redirect(`/vanturepics/${id}`)
-// }))
 
 app.all('*', (req,res,next)=>{
     next(new ExpressError('Page not found', 404))
