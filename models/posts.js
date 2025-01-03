@@ -1,17 +1,23 @@
 const mongoose = require('mongoose')
+const Comments = require('./comments')
 const Schema = mongoose.Schema
 
-const vanturepicSchema = new Schema({
+const VanturepicSchema = new Schema({
     title:String,
     description:String,
     username:String,
     location:String,
     image:String,
-    comments:[
-        {
-            type:Schema.Types.ObjectId, ref:"Coment"
-        }
-    ]
+    comments:[{
+        type: Schema.Types.ObjectId, ref:"Comment"
+    }]
 })
 
-module.exports = mongoose.model('Post', vanturepicSchema)
+VanturepicSchema.post('findOneAndDelete', async function(doc){
+    if(doc){
+       await Comments.deleteMany({_id:{$in: doc.comments}}) 
+    }
+    
+})
+
+module.exports = mongoose.model('Post', VanturepicSchema)

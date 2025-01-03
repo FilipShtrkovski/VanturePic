@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const CatchAsync = require('./utils/CatchAsync')
-const {validatePosts} = require('./middleware')
+const {validatePosts, validateComments} = require('./middleware')
 
 
 
@@ -49,7 +49,7 @@ app.post('/vanturepics', validatePosts, CatchAsync(async(req,res)=>{
 }))
 
 app.get('/vanturepics/:id', CatchAsync(async (req,res)=>{
-    const post = await Post.findById(req.params.id)
+    const post = await Post.findById(req.params.id).populate('comments')
     res.render('vanturepics/show', {post})
 }))
 
@@ -58,7 +58,7 @@ app.get('/vanturepics/:id/edit', CatchAsync(async (req,res) => {
     res.render('vanturepics/edit', {post})
 }))
 
-app.put('/vanturepics/:id', validatePosts, CatchAsync(async (req,res)=>{
+app.put('/vanturepics/:id', CatchAsync(async (req,res)=>{
     const {id} = req.params
     const post = await Post.findByIdAndUpdate(id, {...req.body.posts})
     await post.save()
@@ -71,13 +71,20 @@ app.delete('/vanturepics/:id', CatchAsync(async (req,res)=>{
     res.redirect(`/vanturepics`)
 }))
 
-app.post('/vanturepics/:id/comments', CatchAsync( async (req,res)=>{
+app.post('/vanturepics/:id/comments', validateComments, CatchAsync( async (req,res)=>{
     const post = await Post.findById(req.params.id)
     const comment = new Comment(req.body.comments)
     post.comments.push(comment)
     await comment.save()
     await post.save()
     res.redirect(`/vanturepics/${post.id}`)
+}))
+
+app.delete('/vanturepics/:id/comments/:commentsId', CatchAsync(async (req,res)=>{
+    const {id, commentsId} = req.params
+    await Post.findByIdAndUpdate(id, {$pull: {comments: commentsId}})
+    await Comment.findByIdAndDelete(commentsId)
+    res.redirect(`/vanturepics/${id}`)
 }))
 
 app.all('*', (req,res,next)=>{

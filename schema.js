@@ -9,3 +9,9 @@ module.exports.postsSchema = Joi.object({
     }).required()  
 })
 
+
+module.exports.commentsSchema = Joi.object({
+    comments:Joi.object({
+        body:Joi.string().required(),  
+    }).required()  
+})

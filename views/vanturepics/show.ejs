@@ -24,13 +24,36 @@
       </div>
     </div>
   </div>
-  <form action="/vanturepics/<%= post.id %>/comments" method="POST">
+  <form
+    action="/vanturepics/<%= post.id %>/comments"
+    method="POST"
+    class="validated-form mb-3"
+    novalidate
+  >
     <label class="form-label" for="comment">Comments</label>
     <textarea
       name="comments[body]"
       id="comment"
       class="form-control"
+      required
     ></textarea>
+    <div class="valid-feedback">Looks good</div>
     <button class="btn btn-success">Subbmit</button>
   </form>
+
+  <% for (const comment of post.comments) {%>
+  <div class="card mb-3">
+    <div class="card-body">
+      <p class="card-text"><%= comment.body %></p>
+
+      <form
+        action="/vanturepics/<%= post.id %>/comments/<%= comment.id %>?_method=DELETE"
+        class="d-grid gap-2 d-md-flex justify-content-md-end"
+        method="POST"
+      >
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+  <% } %>
 </div>
