@@ -5,12 +5,13 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const postRouts = require('./routes/posts')
 const commentRouts = require('./routes/comments')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
 const ejsMeta = require('ejs-mate')
-const Post = require('./models/posts') 
-const Comment = require('./models/comments') 
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
+const User = require('./models/user')
 
 mongoose.connect('mongodb://127.0.0.1:27017/vanturePic')
 
@@ -47,6 +48,13 @@ app.use((req,res,next)=>{
     res.locals.error = req.flash('error')
     next()
 })
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use('/vanturepics', postRouts)
 app.use('/vanturepics/:id/comments', commentRouts)
