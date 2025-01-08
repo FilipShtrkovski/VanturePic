@@ -4,21 +4,10 @@ const Post = require('../models/posts')
 const Comment = require('../models/comments') 
 const CatchAsync = require('../utils/CatchAsync')
 const {validateComments} = require('../middleware')
+const comments = require('../controlers/comments.js')
 
-router.post('/',validateComments, CatchAsync( async (req,res)=>{
-        const post = await Post.findById(req.params.id)
-        const comment = new Comment(req.body.comments)
-        post.comments.push(comment)
-        await comment.save()
-        await post.save()
-        res.redirect(`/vanturepics/${post.id}`)
-    }))
+router.post('/',validateComments, CatchAsync(comments.createComment))
 
-router.delete('/:commentsId', CatchAsync(async (req,res)=>{
-    const {id, commentsId} = req.params
-    await Post.findByIdAndUpdate(id, {$pull: {comments: commentsId}})
-    await Comment.findByIdAndDelete(commentsId)
-    res.redirect(`/vanturepics/${id}`)
-}))
+router.delete('/:commentsId', CatchAsync(comments.deleteComment))
 
 module.exports = router

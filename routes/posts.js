@@ -1,44 +1,20 @@
 const express = require("express")
 const router = express.Router()
-const Post = require('../models/posts') 
 const CatchAsync = require('../utils/CatchAsync')
 const {validatePosts} = require('../middleware')
+const posts = require('../controlers/posts.js')
 
 router.route('/')
-    .get(CatchAsync(async (req,res)=>{
-        const posts = await Post.find({})
-        res.render('vanturepics/index', {posts})
-    }))
-    .post(validatePosts, CatchAsync(async(req,res)=>{
-        const post = new Post(req.body.posts)
-        await post.save()
-        res.redirect(`/vanturepics/${post.id}`)
-    }))
+    .get(CatchAsync(posts.index))
+    .post(validatePosts, CatchAsync(posts.createPost))
     
-router.get('/new', CatchAsync(async (req,res)=>{
-    res.render('vanturepics/new')
-}))
+router.get('/new', CatchAsync(posts.renderNewForm))
 
 router.route('/:id')
-    .get(CatchAsync(async (req,res)=>{
-        const post = await Post.findById(req.params.id).populate('comments')
-        res.render('vanturepics/show', {post})
-    }))
-    .put(CatchAsync(async (req,res)=>{
-        const {id} = req.params
-        const post = await Post.findByIdAndUpdate(id, {...req.body.posts})
-        await post.save()
-        res.redirect(`/vanturepics/${post.id}`)
-    }))
-    .delete(CatchAsync(async (req,res)=>{
-        const {id} = req.params
-        await Post.findByIdAndDelete(id)
-        res.redirect(`/vanturepics`)
-    }))
+    .get(CatchAsync(posts.showPost))
+    .put(CatchAsync(posts.editPost))
+    .delete(CatchAsync(posts.deletePost))
 
-router.get('/:id/edit', CatchAsync(async (req,res) => {
-    const post = await Post.findById(req.params.id)
-    res.render('vanturepics/edit', {post})
-}))
+router.get('/:id/edit', CatchAsync(posts.renderEditForm))
 
 module.exports = router
