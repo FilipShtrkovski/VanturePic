@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const session = require('express-session')
 const flash = require('connect-flash')
+const usersRouts = require('./routes/users')
 const postRouts = require('./routes/posts')
 const commentRouts = require('./routes/comments')
 const passport = require('passport')
@@ -56,6 +57,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use('/', usersRouts)
 app.use('/vanturepics', postRouts)
 app.use('/vanturepics/:id/comments', commentRouts)
 
