@@ -14,6 +14,7 @@ const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const User = require('./models/user')
 
+
 mongoose.connect('mongodb://127.0.0.1:27017/vanturePic')
 
 const db = mongoose.connection;
@@ -44,11 +45,8 @@ app.use(express.static( path.join(__dirname, 'public')))
 app.use(session(configSession))
 app.use(flash())
 
-app.use((req,res,next)=>{
-    res.locals.success = req.flash('success')
-    res.locals.error = req.flash('error')
-    next()
-})
+
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -56,6 +54,13 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use((req,res,next)=>{
+    res.locals.currentUser = req.user
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
+    next()
+})
 
 app.use('/', usersRouts)
 app.use('/vanturepics', postRouts)
