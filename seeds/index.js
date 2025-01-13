@@ -10,13 +10,14 @@ db.once("open", () => {
 });
 
 
+
 const seedDB = async () =>{
     await Posts.deleteMany({})
     for (let i = 0; i < 20; i++) {
         const post = new Posts ({
+        author: '678013e7b71409af6f98a8a5',
         title:'Novaci',
         description:'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus modi quia consequuntur quibusdam repellendus id provident, nam consectetur perferendis sint eum.',
-        username:'Violeta',
         image:'https://next-images.123rf.com/index/_next/image/?url=https://assets-cdn.123rf.com/index/static/assets/top-section-bg.jpeg&w=3840&q=75'
         })
       await post.save()  

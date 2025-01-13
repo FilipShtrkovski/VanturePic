@@ -1,12 +1,13 @@
 const Post = require('../models/posts') 
 
 module.exports.index = async (req,res)=>{
-    const posts = await Post.find({})
+    const posts = await Post.find({}).populate('author')
     res.render('vanturepics/index', {posts})
 }
 
 module.exports.createPost = async(req,res)=>{
     const post = new Post(req.body.posts)
+    post.author = req.user.id
     await post.save()
     req.flash('success','Successfuly made a new post')
     res.redirect(`/vanturepics/${post.id}`)
@@ -17,7 +18,7 @@ module.exports.renderNewForm = async (req,res)=>{
 }
 
 module.exports.showPost = async (req,res)=>{
-    const post = await Post.findById(req.params.id).populate('comments')
+    const post = await Post.findById(req.params.id).populate('comments').populate('author')
     if(!post){
         req.flash('error','Cannot find that post')
         return res.redirect('/vanturepics')

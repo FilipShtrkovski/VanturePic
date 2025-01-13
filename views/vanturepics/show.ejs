@@ -6,7 +6,9 @@
       <h5 class="card-title"><%= post.title %></h5>
       <p class="card-text"><%= post.description %></p>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><%= post.username %></li>
+        <li class="list-group-item">
+          Submited by: <%= post.author.username %>
+        </li>
       </ul>
 
       <div class="card-body">
