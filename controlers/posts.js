@@ -8,17 +8,24 @@ module.exports.index = async (req,res)=>{
 module.exports.createPost = async(req,res)=>{
     const post = new Post(req.body.posts)
     post.author = req.user.id
+    console.log(post)
     await post.save()
     req.flash('success','Successfuly made a new post')
     res.redirect(`/vanturepics/${post.id}`)
 }
 
-module.exports.renderNewForm = async (req,res)=>{
+module.exports.renderNewForm = (req,res)=>{
     res.render('vanturepics/new')
 }
 
 module.exports.showPost = async (req,res)=>{
-    const post = await Post.findById(req.params.id).populate('comments').populate('author')
+    const post = await Post.findById(req.params.id)
+    .populate({
+        path:'comments',
+        populate: {
+            path:'author'
+        }
+    }).populate('author')
     if(!post){
         req.flash('error','Cannot find that post')
         return res.redirect('/vanturepics')
@@ -29,7 +36,7 @@ module.exports.showPost = async (req,res)=>{
 module.exports.editPost = async (req,res)=>{
     const {id} = req.params
     const post = await Post.findByIdAndUpdate(id, {...req.body.posts})
-    await post.save()
+    await post.save() 
     if(!post){
         req.flash('error','Cannot find that post')
         return res.redirect('/vanturepics')
@@ -40,6 +47,11 @@ module.exports.editPost = async (req,res)=>{
 
 module.exports.deletePost = async (req,res)=>{
     const {id} = req.params
+    const post = await Post.findById(id)
+    if(!post.author.equals(req.user.id)){
+        req.flash('error','You do not have permition')
+        return res.redirect(`/vanturepics/${post.id}`)
+    }
     await Post.findByIdAndDelete(id)
     req.flash('success','Successfuly deleted a post')
     res.redirect(`/vanturepics`)

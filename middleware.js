@@ -1,5 +1,27 @@
 const {postsSchema, commentsSchema} = require('./schema.js')
 const ExpressError = require('./utils/ExpressError');
+const Post = require('./models/posts.js')
+const Comment = require('./models/comments.js')
+
+module.exports.isAuthor = async function (req,res,next){
+    const {id} = req.params
+    const post = await Post.findById(id)
+    if(!post.author.equals(req.user.id)){
+        req.flash('error','You do not have permition')
+        return res.redirect(`/vanturepics/${id}`)
+    }
+    next()
+}
+
+module.exports.isCommentsAuthor = async function (req,res,next){
+    const {id, commentsId} = req.params
+    const commen = await Comment.findById(commentsId)
+    if(!commen.author.equals(req.user.id)){
+        req.flash('error','You do not have permition')
+        return res.redirect(`/vanturepics/${id}`)
+    }
+    next()
+}
 
 module.exports.isLoggedIn = (req,res,next)=>{
     if(!req.isAuthenticated()){

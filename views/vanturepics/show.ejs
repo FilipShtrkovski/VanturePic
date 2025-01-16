@@ -10,7 +10,7 @@
           Submited by: <%= post.author.username %>
         </li>
       </ul>
-
+      <% if (currentUser && post.author.equals(currentUser)) {%>
       <div class="card-body">
         <div class="btn-group" role="group">
           <a href="/vanturepics/<%= post.id %>/edit" class="btn btn-info"
@@ -24,6 +24,7 @@
           </form>
         </div>
       </div>
+      <% } %>
     </div>
   </div>
   <form
@@ -46,7 +47,9 @@
   <% for (const comment of post.comments) {%>
   <div class="card mb-3">
     <div class="card-body">
+      <h6 class="card-title text-muted">@<%= comment.author.username %></h6>
       <p class="card-text"><%= comment.body %></p>
+      <% if (currentUser && comment.author.equals(currentUser.id)) {%>
       <form
         action="/vanturepics/<%= post.id %>/comments/<%= comment.id %>?_method=DELETE"
         class="d-grid gap-2 d-md-flex justify-content-md-end"
@@ -54,6 +57,7 @@
       >
         <button class="btn btn-sm btn-danger">Delete</button>
       </form>
+      <% } %>
     </div>
   </div>
   <% } %>

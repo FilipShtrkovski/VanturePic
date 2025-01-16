@@ -4,6 +4,7 @@ const Comment = require('../models/comments')
 module.exports.createComment =  async (req,res)=>{
     const post = await Post.findById(req.params.id)
     const comment = new Comment(req.body.comments)
+    comment.author = req.user.id
     post.comments.push(comment)
     await comment.save()
     await post.save()
