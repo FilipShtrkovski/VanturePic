@@ -4,6 +4,7 @@
   class="validated-form row w-50"
   action="/vanturepics/<%= post.id %>?_method=PUT"
   method="POST"
+  enctype="multipart/form-data"
   novalidate
 >
   <div class="mb-3">
@@ -31,15 +32,14 @@
     >
     <div class="valid-feedback">Looks good</div>
   </div>
-  <div class="mb-3">
+  <div class="mb-3 pt-2">
     <label for="formFile" class="form-label">Image</label>
     <input
       class="form-control"
-      type="text"
+      type="file"
       id="formFile"
-      required
-      name="posts[image]"
-      value="<%= post.image %>"
+      name="image"
+      multiple
     />
     <div class="valid-feedback">Looks good</div>
   </div>

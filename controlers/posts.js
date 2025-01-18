@@ -7,8 +7,8 @@ module.exports.index = async (req,res)=>{
 
 module.exports.createPost = async(req,res)=>{
     const post = new Post(req.body.posts)
+    post.images = req.files.map(f => ({url:f.path, filename: f.filename}))
     post.author = req.user.id
-    console.log(post)
     await post.save()
     req.flash('success','Successfuly made a new post')
     res.redirect(`/vanturepics/${post.id}`)
@@ -33,9 +33,20 @@ module.exports.showPost = async (req,res)=>{
     res.render('vanturepics/show', {post})
 }
 
+module.exports.renderEditForm = async (req,res) => {
+    const post = await Post.findById(req.params.id)
+    if(!post){
+        req.flash('error', 'Campgorund not found')
+        return res.redirect('/vanturepics')
+    }
+    res.render('vanturepics/edit', {post})
+}
+
 module.exports.editPost = async (req,res)=>{
     const {id} = req.params
     const post = await Post.findByIdAndUpdate(id, {...req.body.posts})
+    const imgs = req.files.map(f => ({url:f.path, filename: f.filename}))
+    post.images.push(...imgs)
     await post.save() 
     if(!post){
         req.flash('error','Cannot find that post')
@@ -57,7 +68,3 @@ module.exports.deletePost = async (req,res)=>{
     res.redirect(`/vanturepics`)
 }
 
-module.exports.renderEditForm = async (req,res) => {
-    const post = await Post.findById(req.params.id)
-    res.render('vanturepics/edit', {post})
-}

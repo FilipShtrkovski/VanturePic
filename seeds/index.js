@@ -18,8 +18,17 @@ const seedDB = async () =>{
         author: '678013e7b71409af6f98a8a5',
         title:'Novaci',
         description:'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus modi quia consequuntur quibusdam repellendus id provident, nam consectetur perferendis sint eum.',
-        image:'https://next-images.123rf.com/index/_next/image/?url=https://assets-cdn.123rf.com/index/static/assets/top-section-bg.jpeg&w=3840&q=75'
-        })
+        images:[
+            {
+            url: 'https://res.cloudinary.com/daiuoiqvv/image/upload/v1737219082/VanturePic/r5jyjnt4npp6b8vyto4v.jpg',
+            filename: 'VanturePic/r5jyjnt4npp6b8vyto4v',
+          },
+          {
+            url: 'https://res.cloudinary.com/daiuoiqvv/image/upload/v1737219116/VanturePic/chwjzu2rdydvecdxf4tc.jpg',
+            filename: 'VanturePic/chwjzu2rdydvecdxf4tc',
+          }
+        ]
+    })
       await post.save()  
     }
     

@@ -1,19 +1,26 @@
+if(process.env.NODE_ENV !== "production"){
+    require('dotenv').config()
+}
+
 const express = require("express")
 const app = express()
 const path = require('path')
+
+const ejsMeta = require('ejs-mate')
+const passport = require('passport')
 const session = require('express-session')
 const flash = require('connect-flash')
+const LocalStrategy = require('passport-local')
+
 const usersRouts = require('./routes/users')
 const postRouts = require('./routes/posts')
 const commentRouts = require('./routes/comments')
-const passport = require('passport')
-const LocalStrategy = require('passport-local')
-const ejsMeta = require('ejs-mate')
+
+
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const User = require('./models/user')
-
 
 mongoose.connect('mongodb://127.0.0.1:27017/vanturePic')
 

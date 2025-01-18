@@ -7,7 +7,12 @@ const VanturepicSchema = new Schema({
     title:String,
     description:String,
     location:String,
-    image:String,
+    images:[
+        {
+            url:String,
+            filename:String
+        }
+    ],
     comments:[{
         type: Schema.Types.ObjectId, ref:"Comment"
     }],
