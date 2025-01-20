@@ -1,4 +1,5 @@
 const Post = require('../models/posts') 
+const { cloudinary } = require('../cloudinary')
 
 module.exports.index = async (req,res)=>{
     const posts = await Post.find({}).populate('author')
@@ -48,6 +49,12 @@ module.exports.editPost = async (req,res)=>{
     const imgs = req.files.map(f => ({url:f.path, filename: f.filename}))
     post.images.push(...imgs)
     await post.save() 
+    if (req.body.deleteImages) {
+        for (const filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename)
+        }
+        await post.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages }}}})
+    }
     if(!post){
         req.flash('error','Cannot find that post')
         return res.redirect('/vanturepics')
