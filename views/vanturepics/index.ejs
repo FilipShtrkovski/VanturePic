@@ -4,15 +4,21 @@
   <% for (const post of posts) { %>
 
   <div class="card mb-3 col-3 mx-auto" style="width: 18rem">
-    <img src="<%= post.images[0].url %>" class="card-img-top" alt="..." />
+    <img
+      src="<%= post.images[0].url %>"
+      class="card-img-top index pt-3"
+      alt=""
+    />
     <div class="card-body">
       <h5 class="card-title"><%= post.title %></h5>
       <p class="card-text"><%= post.description %></p>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><%= post.author.username %></li>
+        <li class="list-group-item text-secondary">
+          @<%= post.author.username %>
+        </li>
       </ul>
       <div class="card-body">
-        <a href="/vanturepics/<%= post.id %>" class="btn btn-primary"
+        <a href="/vanturepics/<%= post.id %>" class="btn btn-light"
           >View Post</a
         >
       </div>
