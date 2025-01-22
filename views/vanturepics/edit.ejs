@@ -1,0 +1,63 @@
+<% layout('layouts/boylerplate') %>
+
+<form
+  class="validated-form row w-50"
+  action="/vanturepics/<%= post.id %>?_method=PUT"
+  method="POST"
+  enctype="multipart/form-data"
+  novalidate
+>
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      name="posts[title]"
+      value="<%= post.title %>"
+      required
+    />
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea
+      class="form-control"
+      id="description"
+      rows="3"
+      name="posts[description]"
+      required
+    >
+<%= post.description %></textarea
+    >
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Image</label>
+    <input
+      class="form-control"
+      type="file"
+      id="formFile"
+      name="image"
+      multiple
+    />
+    <div class="valid-feedback">Looks good</div>
+  </div>
+  <div class="mb-3 row">
+    <p class="card-text">Delete images</p>
+    <% post.images.forEach((img, i) => {%>
+    <div class="col-4">
+      <img class="img-thumbnail rounded" src="<%= img.thumbnail %>" alt="" />
+      <div class="form-check-inline">
+        <input
+          type="checkbox"
+          name="deleteImages[]"
+          value="<%=img.filename%>"
+          id="image-<%=i%>"
+        />
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  <button class="btn btn-primary">Submit</button>
+</form>
