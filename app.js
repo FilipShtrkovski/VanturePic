@@ -25,7 +25,7 @@ const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const User = require('./models/user')
 
-const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/vanturePic'
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/vanturePic'
  
 mongoose.connect(dbUrl)
 
