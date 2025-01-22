@@ -24,10 +24,9 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const User = require('./models/user')
-const { func } = require('joi')
 
-const dbUrl ='mongodb://127.0.0.1:27017/vanturePic'
-// process.env.DB_URL 
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/vanturePic'
+ 
 mongoose.connect(dbUrl)
 
 const db = mongoose.connection;
@@ -36,19 +35,21 @@ db.once("open", () => {
     console.log("Database connected")
 });
 
+const secret = process.env.SECRET || 'thisisasecret'
+
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    secret:'Thisisasecret',
+    secret,
     touchAfter: 24 * 3600
 })
 
 store.on('error', function(e){
-    console.log('SESSION STORE ERROR',e)
+    console.log('SESSION STORE ERROR')
 })
 
 const configSession = {
     store,
-    secret:'Thisisasecret',
+    secret,
     name: 'session',
     resave: false,
     saveUninitialized: true,
