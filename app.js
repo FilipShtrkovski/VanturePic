@@ -39,8 +39,8 @@ const secret = process.env.SECRET || 'thisisasecret'
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    secret,
-    touchAfter: 24 * 3600
+    touchAfter: 24 * 3600,
+    secret
 })
 
 store.on('error', function(e){
@@ -55,7 +55,6 @@ const configSession = {
     saveUninitialized: true,
     cookie:{
         httpOnly: true,
-        secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, 
         maxAge: + 1000 * 60 * 60 * 24 * 7
     } 
@@ -128,6 +127,8 @@ app.use((err,req,res,next)=>{
     res.status(status).render('partials/error', {err})
 })
 
-app.listen(3000, ()=>{
-    console.log('LISTENING TO PORT 3000')
+const port = process.env.PORT || '3000'
+
+app.listen(port, ()=>{
+    console.log(`Serving On Port ${port}`)
 })
