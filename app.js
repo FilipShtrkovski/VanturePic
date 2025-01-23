@@ -24,8 +24,8 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const User = require('./models/user')
-
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/vanturePic'
+// process.env.DB_URL ||
+const dbUrl =  'mongodb://localhost:27017/vanturePic'
  
 mongoose.connect(dbUrl)
 
@@ -34,13 +34,13 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
     console.log("Database connected")
 });
-
-const secret = process.env.SECRET || 'thisisasecret'
+// process.env.SECRET ||
+const secret =  'thisisasecret'
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    secret,
-    touchAfter: 24 * 3600
+    touchAfter: 24 * 3600,
+    secret
 })
 
 store.on('error', function(e){
@@ -55,7 +55,7 @@ const configSession = {
     saveUninitialized: true,
     cookie:{
         httpOnly: true,
-        secure: true,
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, 
         maxAge: + 1000 * 60 * 60 * 24 * 7
     } 
@@ -128,6 +128,8 @@ app.use((err,req,res,next)=>{
     res.status(status).render('partials/error', {err})
 })
 
-app.listen(3000, ()=>{
-    console.log('LISTENING TO PORT 3000')
+const port = process.env.PORT || '3000'
+
+app.listen(port, ()=>{
+    console.log(`Serving On Port ${port}`)
 })

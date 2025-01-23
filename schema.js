@@ -28,7 +28,7 @@ module.exports.postsSchema = Joi.object({
     posts:Joi.object({
         title:Joi.string().required().escapeHTML(),
         description:Joi.string().required().escapeHTML(),
-        // image:Joi.string().required()  
+
     }).required(),  
     deleteImages: Joi.array()
 })
