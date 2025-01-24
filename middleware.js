@@ -6,7 +6,7 @@ const Comment = require('./models/comments.js')
 module.exports.isAuthor = async function (req,res,next){
     const {id} = req.params
     const post = await Post.findById(id)
-    if(!post.author.equals(req.user.id)){
+    if(!id && !post.author.equals(req.user.id)){
         req.flash('error','You do not have permition')
         return res.redirect(`/vanturepics/${id}`)
     }
@@ -16,7 +16,7 @@ module.exports.isAuthor = async function (req,res,next){
 module.exports.isCommentsAuthor = async function (req,res,next){
     const {id, commentsId} = req.params
     const commen = await Comment.findById(commentsId)
-    if(!commen.author.equals(req.user.id)){
+    if(!id && !commen.author.equals(req.user.id)){
         req.flash('error','You do not have permition')
         return res.redirect(`/vanturepics/${id}`)
     }
@@ -41,8 +41,8 @@ module.exports.storeReturnTo = (req, res, next) => {
 module.exports.validatePosts = ((req,res,next)=>{
     const {error} = postsSchema.validate(req.body)
     if(error){
-    const msg = error.details.map(el=>el.message).join(',')
-    throw new ExpressError(msg, 400)
+        const msg = error.details.map(el=>el.message).join(',')
+        throw new ExpressError(msg, 400)
     }else{
         next()
     }

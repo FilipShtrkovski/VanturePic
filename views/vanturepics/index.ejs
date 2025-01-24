@@ -1,14 +1,24 @@
 <% layout('layouts/boylerplate') %>
-
+<link rel="stylesheet" href="/stylesheets/index.css " />
 <div class="row">
   <% for (const post of posts) { %>
 
-  <div class="card mb-3 col-3 mx-auto" style="width: 18rem">
+  <div class="card mb-3 col-3 mx-auto" style="width: 20rem">
+    <% if (post.images.length) {%>
     <img
+      crossorigin="anonymous"
       src="<%= post.images[0].url %>"
       class="card-img-top index pt-3"
       alt=""
     />
+    <% }else{ %>
+    <img
+      crossorigin="anonymous"
+      class="card-img-top index pt-3"
+      src="https://res.cloudinary.com/daiuoiqvv/image/upload/v1737219082/VanturePic/r5jyjnt4npp6b8vyto4v.jpg"
+      alt=""
+    />
+    <% } %>
     <div class="card-body">
       <h5 class="card-title"><%= post.title %></h5>
       <p class="card-text"><%= post.description %></p>

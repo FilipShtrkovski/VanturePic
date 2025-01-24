@@ -6,6 +6,10 @@ module.exports.index = async (req,res)=>{
     res.render('vanturepics/index', {posts})
 }
 
+module.exports.renderNewForm = (req,res)=>{
+    res.render('vanturepics/new')
+}
+
 module.exports.createPost = async(req,res)=>{
     const post = new Post(req.body.posts)
     post.images = req.files.map(f => ({url:f.path, filename: f.filename}))
@@ -13,10 +17,6 @@ module.exports.createPost = async(req,res)=>{
     await post.save()
     req.flash('success','Successfuly made a new post')
     res.redirect(`/vanturepics/${post.id}`)
-}
-
-module.exports.renderNewForm = (req,res)=>{
-    res.render('vanturepics/new')
 }
 
 module.exports.showPost = async (req,res)=>{

@@ -15,7 +15,6 @@ const LocalStrategy = require('passport-local')
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet')
 
-
 const usersRouts = require('./routes/users')
 const postRouts = require('./routes/posts')
 const commentRouts = require('./routes/comments')
@@ -25,7 +24,7 @@ const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const User = require('./models/user')
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/vanturePic'
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/vanturePic'
  
 mongoose.connect(dbUrl)
 
@@ -35,12 +34,26 @@ db.once("open", () => {
     console.log("Database connected")
 });
 
+app.engine('ejs', ejsMeta)
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+
+app.use(express.urlencoded({extended:true}))
+app.use(methodOverride('_method'))
+app.use(express.static( path.join(__dirname, 'public')))
+app.use(mongoSanitize({
+    replaceWith: '_',
+}));
+
+
 const secret = process.env.SECRET || 'thisisasecret'
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 3600,
-    secret
+    crypto: {
+        secret
+    }
 })
 
 store.on('error', function(e){
@@ -60,19 +73,10 @@ const configSession = {
     } 
 }
 
-app.engine('ejs', ejsMeta)
-
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'))
-
-app.use(express.urlencoded({extended:true}))
-app.use(methodOverride('_method'))
-app.use(express.static( path.join(__dirname, 'public')))
-
 app.use(session(configSession))
 app.use(flash())
-app.use(mongoSanitize());
-app.use(helmet());
+app.use(helmet({contentSecurityPolicy: false}))
+
 
 const fontSrcUrls = [];
 app.use(
@@ -85,13 +89,28 @@ app.use(
                 "'self'",
                 "blob:",
                 "data:",
-                "https://res.cloudinary.com/daiuoiqvv/",
+                "https://res.cloudinary.com/daiuoiqvv/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 "https://images.unsplash.com/",
+            ],
+            
+            scriptSrc: [
+                "'self'", 
+                "'unsafe-inline'", 
+                "https://cdn.jsdelivr.net/",  
+                "https://stackpath.bootstrapcdn.com/" 
+            ],
+            styleSrc: [
+                "'self'", 
+                "'unsafe-inline'", 
+                "https://cdn.jsdelivr.net/", 
+                "https://stackpath.bootstrapcdn.com/" 
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
         },
     })
 );
+
+
 
 app.use(passport.initialize());
 app.use(passport.session());
