@@ -47,16 +47,16 @@
       </ul>
       <% if (currentUser && post.author.equals(currentUser)) {%>
       <div class="card-body">
-        <div class="btn-group" role="group">
-          <a href="/vanturepics/<%= post.id %>/edit" class="btn btn-info"
-            >Edit</a
-          >
+        <div class="d-flex justify-content-between">
           <form
             action="/vanturepics/<%= post.id %>?_method=DELETE"
             method="POST"
           >
             <button class="btn btn-danger">Delete</button>
           </form>
+          <a href="/vanturepics/<%= post.id %>/edit" class="btn btn-info">
+            Edit
+          </a>
         </div>
       </div>
       <% } %>
