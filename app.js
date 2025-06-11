@@ -23,8 +23,8 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
 const User = require('./models/user')
-
-const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/vanturePic'
+// process.env.DB_URL ||
+const dbUrl =  'mongodb://127.0.0.1:27017/vanturePic'
  
 mongoose.connect(dbUrl)
 
@@ -44,9 +44,9 @@ app.use(express.static( path.join(__dirname, 'public')))
 app.use(mongoSanitize({
     replaceWith: '_',
 }));
+//  process.env.SECRET || 
 
-
-const secret = process.env.SECRET || 'thisisasecret'
+const secret ='thisisasecret'
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
@@ -145,8 +145,8 @@ app.use((err,req,res,next)=>{
     if(!err.message) err.message = "Something went wrong"
     res.status(status).render('partials/error', {err})
 })
-
-const port = process.env.PORT || '3000'
+// process.env.PORT ||
+const port =  '3000'
 
 app.listen(port, ()=>{
     console.log(`Serving On Port ${port}`)
