@@ -1,45 +1,48 @@
 <% layout('layouts/boylerplate') %>
-
-<form
-  class="validated-form row col-6"
-  action="/vanturepics"
-  method="POST"
-  enctype="multipart/form-data"
-  novalidate
->
-  <div class="mb-3">
-    <label for="title" class="form-label">Title</label>
-    <input
-      type="text"
-      class="form-control"
-      id="title"
-      name="posts[title]"
-      required
-    />
-    <div class="valid-feedback">Looks good</div>
+<div class="row mt-5">
+  <div class="col-6 m-auto">
+    <form
+      class="validated-form"
+      action="/vanturepics"
+      method="POST"
+      enctype="multipart/form-data"
+      novalidate
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="posts[title]"
+          required
+        />
+        <div class="valid-feedback">Looks good</div>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          class="form-control"
+          id="description"
+          rows="3"
+          name="posts[description]"
+          required
+        ></textarea>
+        <div class="valid-feedback">Looks good</div>
+      </div>
+      <div class="mb-3 pt-2">
+        <label for="formFile" class="form-label">Image</label>
+        <input
+          class="form-control"
+          type="file"
+          id="formFile"
+          required
+          name="image"
+          multiple
+        />
+        <div class="valid-feedback">Looks good</div>
+      </div>
+      <button class="btn btn-primary col-8 m-auto">Submit</button>
+    </form>
   </div>
-  <div class="mb-3">
-    <label for="description" class="form-label">Description</label>
-    <textarea
-      class="form-control"
-      id="description"
-      rows="3"
-      name="posts[description]"
-      required
-    ></textarea>
-    <div class="valid-feedback">Looks good</div>
-  </div>
-  <div class="mb-3 pt-2">
-    <label for="formFile" class="form-label">Image</label>
-    <input
-      class="form-control"
-      type="file"
-      id="formFile"
-      required
-      name="image"
-      multiple
-    />
-    <div class="valid-feedback">Looks good</div>
-  </div>
-  <button class="btn btn-primary col-8 m-auto">Submit</button>
-</form>
+</div>

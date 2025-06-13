@@ -13,7 +13,7 @@ db.once("open", () => {
 
 const seedDB = async () =>{
     await Posts.deleteMany({})
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
         const post = new Posts ({
         author: '678013e7b71409af6f98a8a5',
         title:'Novaci',
